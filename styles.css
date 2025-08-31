@@ -314,9 +314,7 @@ nav ul li a:hover:after {
     position: relative;
     padding: 120px 0 80px;
     overflow: hidden;
-    background: linear-gradient(135deg, rgba(15, 15, 19, 0.9) 0%, rgba(15, 15, 19, 0.8) 100%), url('https://images.unsplash.com/photo-1574267432553-4b4628081c31?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80');
-    background-size: cover;
-    background-position: center;
+    background: var(--dark-bg); /* إزالة الصورة الخلفية واستخدام لون خلفي بسيط */
 }
 
 .hero-content {
@@ -707,10 +705,7 @@ nav ul li a:hover:after {
 /* Features Section */
 .features {
     padding: 100px 0;
-    background: linear-gradient(135deg, rgba(15, 15, 19, 0.9) 0%, rgba(15, 15, 19, 0.8) 100%), url('https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: var(--dark-bg); /* إزالة الصورة الخلفية */
 }
 
 .features-grid {
@@ -1026,6 +1021,39 @@ footer {
         padding: 12px 20px;
         font-size: 16px;
     }
+    
+    .plan-card {
+        margin: 0 10px;
+    }
+    
+    .plan-header {
+        padding: 20px 15px;
+    }
+    
+    .plan-price {
+        font-size: 36px;
+    }
+    
+    .plan-name {
+        font-size: 20px;
+    }
+    
+    .plan-features {
+        padding: 20px 15px;
+    }
+    
+    .feature-card {
+        padding: 30px 20px;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .feature-icon i {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1051,7 +1079,7 @@ footer {
     }
     
     .plan-name {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .header-content {
@@ -1088,6 +1116,19 @@ footer {
     .user-actions {
         width: 100%;
         justify-content: space-between;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .hero {
+        padding: 80px 0 40px;
+    }
+    
+    .services, .features, .faq {
+        padding: 60px 0;
     }
 }
 
