@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر الاشتراكات - Netflix، OSN، شاهد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-play-circle"></i>
+                    متجر الاشتراكات
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#">الرئيسية</a></li>
+                        <li><a href="#">الاشتراكات</a></li>
+                        <li><a href="#">العروض</a></li>
+                        <li><a href="#">المميزات</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" placeholder="ابحث عن اشتراك...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    
+                    <div class="user-actions">
+                        <a href="#" class="login-btn">تسجيل الدخول</a>
+                        <a href="#" class="signup-btn">إنشاء حساب</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>اشترك في أفضل خدمات البث المباشر</h1>
+                    <p>استمتع بمشاهدة المحتوى المميز من Netflix وOSN وشاهد بأفضل الأسعار والعروض الحصرية</p>
+                    <a href="#services" class="btn"><span>اكتشف الاشتراكات</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>خدماتنا</h2>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn netflix active" data-tab="netflix">
+                    <i class="fab fa-netflix"></i>
+                    Netflix
+                </button>
+                <button class="tab-btn osn" data-tab="osn">
+                    <i class="fas fa-tv"></i>
+                    OSN
+                </button>
+                <button class="tab-btn shahid" data-tab="shahid">
+                    <i class="fas fa-play"></i>
+                    شاهد
+                </button>
+                <button class="tab-btn spotify" data-tab="spotify">
+                    <i class="fab fa-spotify"></i>
+                    Spotify
+                </button>
+                <button class="tab-btn youtube" data-tab="youtube">
+                    <i class="fab fa-youtube"></i>
+                    YouTube Premium
+                </button>
+            </div>
+            
+            <!-- Netflix Plans -->
+            <div class="tab-content active" id="netflix-tab">
+                <div class="plans">
+                    <div class="plans-grid">
+                        <div class="plan-card netflix animate-on-scroll">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الباسيك</h3>
+                                <div class="plan-price">49 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشة واحدة</li>
+                                    <li><i class="fas fa-check"></i> جودة SD</li>
+                                    <li><i class="fas fa-check"></i> مشاهدة على الهاتف أو التابلت</li>
+                                    <li><i class="fas fa-check"></i> مكتبة أفلام وتلفزيون كاملة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card netflix animate-on-scroll delay-1">
+                            <div class="plan-header">
+                                <h3 class="plan-name">ستاندارد</h3>
+                                <div class="plan-price">69 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشتين في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جuality HD</li>
+                                    <li><i class="fas fa-check"></i> مشاهدة على اللابتوب أو التلفاز</li>
+                                    <li><i class="fas fa-check"></i> مكتبة أفلام وتلفزيون كاملة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card netflix animate-on-scroll delay-2">
+                            <div class="plan-header">
+                                <h3 class="plan-name">بريميوم</h3>
+                                <div class="plan-price">99 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> 4 شاشات في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جودة 4K Ultra HD</li>
+                                    <li><i class="fas fa-check"></i> مشاهدة على 4 أجهزة مختلفة</li>
+                                    <li><i class="fas fa-check"></i> مكتبة أفلام وتلفزيون كاملة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- OSN Plans -->
+            <div class="tab-content" id="osn-tab">
+                <div class="plans">
+                    <div class="plans-grid">
+                        <div class="plan-card osn animate-on-scroll">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الاساسي</h3>
+                                <div class="plan-price">59 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشة واحدة</li>
+                                    <li><i class="fas fa-check"></i> جودة HD</li>
+                                    <li><i class="fas fa-check"></i> قنوات أفلام وسلسلات</li>
+                                    <li><i class="fas fa-check"></i> محتوى حصري</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card osn animate-on-scroll delay-1">
+                            <div class="plan-header">
+                                <h3 class="plan-name">المميز</h3>
+                                <div class="plan-price">89 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشتين في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جودة Full HD</li>
+                                    <li><i class="fas fa-check"></i> جميع القنوات المتاحة</li>
+                                    <li><i class="fas fa-check"></i> محتوى حصري وأفلام جديدة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card osn animate-on-scroll delay-2">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الأسرة</h3>
+                                <div class="plan-price">129 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> 4 شاشات في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جودة 4K Ultra HD</li>
+                                    <li><i class="fas fa-check"></i> جميع القنوات والمحتوى</li>
+                                    <li><i class="fas fa-check"></i> باقات أطفال وعائلة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shahid Plans -->
+            <div class="tab-content" id="shahid-tab">
+                <div class="plans">
+                    <div class="plans-grid">
+                        <div class="plan-card shahid animate-on-scroll">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الأساسي</h3>
+                                <div class="plan-price">39 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشة واحدة</li>
+                                    <li><i class="fas fa-check"></i> جودة HD</li>
+                                    <li><i class="fas fa-check"></i> مسلسلات عربية وعالمية</li>
+                                    <li><i class="fas fa-check"></i> محتوى حصري</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card shahid animate-on-scroll delay-1">
+                            <div class="plan-header">
+                                <h3 class="plan-name">بريميوم</h3>
+                                <div class="plan-price">69 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> شاشتين في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جودة Full HD</li>
+                                    <li><i class="fas fa-check"></i> جميع المحتوى الحصري</li>
+                                    <li><i class="fas fa-check"></i> أولوية بالمشاهدة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card shahid animate-on-scroll delay-2">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الأسرة</h3>
+                                <div class="plan-price">99 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> 4 شاشات في نفس الوقت</li>
+                                    <li><i class="fas fa-check"></i> جودة 4K Ultra HD</li>
+                                    <li><i class="fas fa-check"></i> جميع المحتوى بدون استثناء</li>
+                                    <li><i class="fas fa-check"></i> باقات أطفال وعائلة</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spotify Plans -->
+            <div class="tab-content" id="spotify-tab">
+                <div class="plans">
+                    <div class="plans-grid">
+                        <div class="plan-card spotify animate-on-scroll">
+                            <div class="plan-header">
+                                <h3 class="plan-name">فردي</h3>
+                                <div class="plan-price">29 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> حساب واحد</li>
+                                    <li><i class="fas fa-check"></i> تشغيل بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الأغاني</li>
+                                    <li><i class="fas fa-check"></i> تشغيل غير محدود</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card spotify animate-on-scroll delay-1">
+                            <div class="plan-header">
+                                <h3 class="plan-name">العائلة</h3>
+                                <div class="plan-price">49 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> 6 حسابات</li>
+                                    <li><i class="fas fa-check"></i> تشغيل بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الأغاني</li>
+                                    <li><i class="fas fa-check"></i> رقابة parental control</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card spotify animate-on-scroll delay-2">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الطالب</h3>
+                                <div class="plan-price">19 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> حساب واحد</li>
+                                    <li><i class="fas fa-check"></i> تشغيل بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الأغاني</li>
+                                    <li><i class="fas fa-check"></i> خصم خاص للطلاب</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- YouTube Premium Plans -->
+            <div class="tab-content" id="youtube-tab">
+                <div class="plans">
+                    <div class="plans-grid">
+                        <div class="plan-card youtube animate-on-scroll">
+                            <div class="plan-header">
+                                <h3 class="plan-name">فردي</h3>
+                                <div class="plan-price">35 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> حساب واحد</li>
+                                    <li><i class="fas fa-check"></i> يوتيوب بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الفيديوهات</li>
+                                    <li><i class="fas fa-check"></i> تشغيل في الخلفية</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card youtube animate-on-scroll delay-1">
+                            <div class="plan-header">
+                                <h3 class="plan-name">العائلة</h3>
+                                <div class="plan-price">65 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> 6 حسابات</li>
+                                    <li><i class="fas fa-check"></i> يوتيوب بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الفيديوهات</li>
+                                    <li><i class="fas fa-check"></i> يوتيوب ميوزك مجاني</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-card youtube animate-on-scroll delay-2">
+                            <div class="plan-header">
+                                <h3 class="plan-name">الطالب</h3>
+                                <div class="plan-price">25 <span>ر.س</span></div>
+                                <div class="plan-duration">شهرياً</div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> حساب واحد</li>
+                                    <li><i class="fas fa-check"></i> يوتيوب بدون إعلانات</li>
+                                    <li><i class="fas fa-check"></i> تحميل الفيديوهات</li>
+                                    <li><i class="fas fa-check"></i> خصم خاص للطلاب</li>
+                                </ul>
+                                <button class="plan-btn">اشترك الآن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>مميزات الاشتراك</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <h3>مشاهدة على أي جهاز</h3>
+                    <p>استمتع بمشاهدة المحتوى على هاتفك، تابلت، لابتوب أو تلفازك الذكي</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>تحميل للمشاهدة لاحقاً</h3>
+                    <p>حمل المحتوى المفضل لديك وشاهده في أي وقت بدون انترنت</p>
+                </div>
+                
+                <div class="feature-card animate-on-scroll delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>محتوى حصري</h3>
+                    <p>تمتع بمحتوى حصري لا تجده في أي مكان آخر</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>الأسئلة الشائعة</h2>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        كيف يمكنني الاشتراك في الخدمة؟
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>يمكنك الاشتراك عن طريق اختيار الباقة المناسبة لك والضغط على زر "اشترك الآن"، ثم اتباع الخطوات لإتمام عملية الدفع.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        هل يمكنني إلغاء الاشتراك في أي وقت؟
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>نعم، يمكنك إلغاء الاشتراك في أي وقت بدون أي رسوم إضافية، وسيستمر الاشتراك حتى نهاية الفترة المدفوعة.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        كيف يمكنني الدفع؟
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>نوفر多种 خيارات دفع متعددة تشمل البطاقات الائتمانية، PayPal، والدفع عند الاستلام.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        هل المحتوى متاح للعائلة؟
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>نعم، لدينا باقات عائلية تتيح لك إنشاء ملفات متعددة لأفراد العائلة مع مراقبة parental control للمحتوى.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>عن المتجر</h3>
+                    <p>متجر الاشتراكات يقدم لكم أفضل باقات Netflix وOSN وشاهد بأفضل الأسعار والعروض الحصرية.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="#">الرئيسية</a></li>
+                        <li><a href="#">الاشتراكات</a></li>
+                        <li><a href="#">المميزات</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>خدماتنا</h3>
+                    <ul>
+                        <li><a href="#">Netflix</a></li>
+                        <li><a href="#">OSN</a></li>
+                        <li><a href="#">شاهد</a></li>
+                        <li><a href="#">عروض خاصة</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>اتصل بنا</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> العنوان: الرياض، المملكة العربية السعودية</li>
+                        <li><i class="fas fa-phone"></i> الهاتف: 0551234567</li>
+                        <li><i class="fas fa-envelope"></i> البريد: info@subscriptions.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة © 2023 متجر الاشتراكات</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
