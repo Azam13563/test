@@ -3,183 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZZAM CUT PRO | النسخة الخارقة</title>
+    <title>AZZAM CUT | الإصلاح النهائي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+Arabic:wght@400;900&display=swap');
-        
-        body {
-            background-color: #050505;
-            color: #f0f0f5;
-            font-family: 'Noto Sans Arabic', sans-serif;
-        }
+        body { background: #020202; color: #f0f0f5; font-family: 'Noto Sans Arabic', sans-serif; -webkit-tap-highlight-color: transparent; }
         .font-pro { font-family: 'Orbitron', sans-serif; }
-        
-        /* تصميم شريط التمرير الخارق */
-        input[type=range] {
-            -webkit-appearance: none;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 18px;
-            width: 18px;
-            border-radius: 50%;
-            background: #a855f7;
-            margin-top: -6px;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
-            cursor: pointer;
-        }
+        .progress-glow { box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
     </style>
 </head>
-<body class="min-h-screen overflow-x-hidden">
+<body class="min-h-screen">
 
-    <!-- شاشة القفل -->
-    <div id="lock-screen" class="fixed inset-0 z-[100] bg-[#020202] flex items-center justify-center p-6 transition-all duration-700">
-        <div class="w-full max-w-sm bg-[#0a0a0a] rounded-[3rem] p-10 border border-white/10 shadow-2xl text-center">
-            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl">
-                <i data-lucide="lock" class="w-10 h-10 text-white"></i>
-            </div>
-            <h1 class="text-3xl font-black mb-2 italic tracking-tighter font-pro uppercase">AZZAM <span class="text-purple-500">CUT</span></h1>
-            <p class="text-gray-500 text-[10px] mb-8 tracking-[0.3em] font-bold">AUTHORIZED PERSONNEL ONLY</p>
-            <div class="space-y-4">
-                <input type="password" id="pin-input" placeholder="••••" maxlength="4" class="w-full bg-black border border-white/5 rounded-2xl p-4 text-center text-3xl tracking-[0.5em] focus:border-purple-500 outline-none text-white transition-all">
-                <p id="error-msg" class="text-red-500 text-xs font-bold hidden">الرمز غير صحيح يا عزام!</p>
-                <button onclick="checkPin()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-lg hover:bg-purple-600 hover:text-white transition-all">دخول</button>
-            </div>
+    <!-- شاشة الدخول -->
+    <div id="lock-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
+        <div class="w-full max-w-sm bg-[#0a0a0a] rounded-[2.5rem] p-10 border border-white/5 text-center shadow-2xl">
+            <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-900/20"><i data-lucide="shield-check" class="text-white"></i></div>
+            <h1 class="text-2xl font-black mb-6 font-pro uppercase italic">AZZAM <span class="text-purple-500">AUTH</span></h1>
+            <input type="password" id="pin-input" placeholder="••••" maxlength="4" class="w-full bg-black border border-white/10 rounded-2xl p-4 text-center text-3xl tracking-[0.5em] outline-none text-white mb-6 focus:border-purple-500 transition-all">
+            <button onclick="checkPin()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">فتح المحرك</button>
         </div>
     </div>
 
-    <!-- المحرك الرئيسي -->
-    <div id="app-content" class="hidden opacity-0 transition-opacity duration-1000 max-w-[1400px] mx-auto p-4 md:p-10">
-        
-        <!-- Header -->
-        <header class="flex items-center justify-between mb-8 bg-[#0a0a0a] p-5 rounded-[2.5rem] border border-white/5 shadow-2xl">
-            <div class="flex items-center gap-4">
-                <div class="bg-purple-600 p-2.5 rounded-2xl">
-                    <i data-lucide="zap" class="w-6 h-6 text-white fill-current"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-black italic font-pro">AZZAM CUT <span class="text-purple-500">ULTRA</span></h1>
-                    <p class="text-[8px] text-gray-500 font-bold tracking-widest uppercase">iPad Performance Mode</p>
-                </div>
+    <!-- واجهة البرنامج -->
+    <div id="app-content" class="hidden opacity-0 transition-opacity duration-500 p-4 md:p-10 max-w-2xl mx-auto">
+        <header class="flex items-center justify-between mb-8 bg-[#0a0a0a] p-6 rounded-[2rem] border border-white/5">
+            <h1 class="text-xl font-black italic font-pro uppercase tracking-tighter">AZZAM CUT <span class="text-purple-500 text-xs">V2.1</span></h1>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-[9px] font-bold text-gray-500 uppercase">System Ready</span>
             </div>
-            <button onclick="location.reload()" class="p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all">
-                <i data-lucide="refresh-cw" class="w-5 h-5 text-gray-400"></i>
-            </button>
         </header>
 
-        <main id="upload-zone" class="bg-[#0a0a0a] border-2 border-dashed border-white/5 rounded-[4rem] p-24 text-center hover:border-purple-500/50 transition-all cursor-pointer group shadow-inner relative">
+        <!-- منطقة الرفع -->
+        <div id="upload-zone" class="bg-[#0a0a0a] border-2 border-dashed border-white/10 rounded-[3rem] p-20 text-center hover:border-purple-500/50 transition-all">
             <input type="file" id="video-in" class="hidden" accept="video/*" onchange="handleFile(event)">
-            <label for="video-in" class="cursor-pointer">
-                <div class="bg-gray-900 w-24 h-24 rounded-[2rem] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all border border-white/5">
-                    <i data-lucide="upload" class="text-purple-500 w-10 h-10"></i>
-                </div>
-                <h2 class="text-3xl font-black mb-2 italic">ارفع المقطع يا عزام</h2>
-                <p class="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Tap to start editing</p>
+            <label for="video-in" class="cursor-pointer block">
+                <i data-lucide="clapperboard" class="text-purple-500 w-12 h-12 mx-auto mb-4"></i>
+                <h2 class="text-2xl font-black italic mb-2">ارفع لقطتك يا بطل</h2>
+                <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Select PUBG Highlight</p>
             </label>
-        </main>
+        </div>
 
-        <div id="editor-zone" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <!-- Viewport -->
-            <div class="lg:col-span-7">
-                <div class="relative aspect-[9/16] bg-black rounded-[3rem] overflow-hidden shadow-2xl border border-white/10 max-h-[750px] mx-auto">
-                    <canvas id="preview-canvas" width="1080" height="1920" class="w-full h-full object-cover"></canvas>
-                    <video id="source-video" class="hidden" muted playsinline loop></video>
-                    
-                    <div id="processing-overlay" class="hidden absolute inset-0 bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center p-12 z-50 text-center">
-                        <i data-lucide="refresh-cw" class="w-16 h-16 text-purple-500 animate-spin mb-6"></i>
-                        <h3 class="text-2xl font-black italic mb-4">ENGINEERING...</h3>
-                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden max-w-sm mb-4">
-                            <div id="progress-bar" class="bg-purple-600 h-full w-0 transition-all shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
-                        </div>
-                        <p id="progress-text" class="text-purple-400 font-black text-xl">0%</p>
+        <!-- منطقة المحرر -->
+        <div id="editor-zone" class="hidden space-y-6">
+            <div class="relative aspect-[9/16] bg-black rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
+                <canvas id="preview-canvas" width="720" height="1280" class="w-full h-full object-cover"></canvas>
+                <video id="source-video" class="hidden" muted playsinline></video>
+                
+                <!-- طبقة التحميل -->
+                <div id="processing-overlay" class="hidden absolute inset-0 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-10 z-50">
+                    <div class="relative mb-8">
+                        <div class="w-20 h-20 rounded-full border-4 border-purple-500/20 border-t-purple-500 animate-spin"></div>
+                        <i data-lucide="zap" class="absolute inset-0 m-auto w-8 h-8 text-yellow-500 fill-current animate-pulse"></i>
                     </div>
+                    <h3 class="text-2xl font-black italic mb-2">جاري الحفظ النهائي...</h3>
+                    <p class="text-gray-500 text-[10px] mb-8 font-bold uppercase tracking-widest">Saving to iPad Gallery</p>
+                    <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden mb-3">
+                        <div id="progress-bar" class="bg-gradient-to-r from-purple-600 to-blue-500 h-full w-0 transition-all duration-300 progress-glow"></div>
+                    </div>
+                    <p id="progress-text" class="text-purple-400 font-black text-2xl font-pro">0%</p>
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div class="lg:col-span-5 space-y-6">
-                <div class="bg-[#0a0a0a] rounded-[3rem] p-8 border border-white/5 shadow-2xl">
-                    <div class="flex items-center justify-between mb-10">
-                        <h3 class="text-[10px] font-black text-gray-500 uppercase flex items-center gap-2 tracking-widest italic">
-                            <i data-lucide="settings" class="w-4 h-4"></i> Control Deck
-                        </h3>
-                        <button onclick="applyGolden()" class="bg-yellow-500/10 text-yellow-500 px-4 py-2 rounded-xl border border-yellow-500/20 text-[10px] font-black hover:bg-yellow-500 hover:text-black transition-all">
-                            اللمسة الذهبية ✨
-                        </button>
-                    </div>
-
-                    <div class="space-y-10">
-                        <div class="space-y-4">
-                            <div class="flex justify-between text-[10px] font-black uppercase text-gray-500 tracking-tighter">
-                                <span>قوة الألوان (SAT)</span>
-                                <span id="val-sat" class="text-purple-500">1.5x</span>
-                            </div>
-                            <input type="range" id="sat" min="1" max="5" step="0.1" value="1.5" oninput="updateFilters()" class="w-full">
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="flex justify-between text-[10px] font-black uppercase text-gray-500 tracking-tighter">
-                                <span>الحدة (CON)</span>
-                                <span id="val-con" class="text-blue-500">1.2x</span>
-                            </div>
-                            <input type="range" id="con" min="1" max="3" step="0.1" value="1.2" oninput="updateFilters()" class="w-full">
-                        </div>
-
-                        <div id="action-buttons">
-                            <button onclick="renderVideo()" class="w-full bg-white text-black py-6 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all">
-                                <i data-lucide="sparkles" class="w-6 h-6 fill-current"></i> تصدير المقطع
-                            </button>
-                        </div>
-
-                        <div id="download-zone" class="hidden space-y-4">
-                            <a id="download-link" href="#" download="AZZAM_EDIT.mp4" class="w-full bg-purple-600 text-white py-6 rounded-[2rem] font-black text-xl text-center block shadow-lg active:scale-95">حفظ الفيديو</a>
-                            <button onclick="window.open('https://www.tiktok.com/upload')" class="w-full bg-black text-white py-6 rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 border border-white/10 hover:bg-[#ff0050] transition-all">
-                                <i data-lucide="share-2" class="w-5 h-5"></i> نشر في تيك توك
-                            </button>
-                        </div>
-                    </div>
+            <div class="bg-[#0a0a0a] p-8 rounded-[2.5rem] border border-white/5 space-y-8">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] italic">Color Saturation</span>
+                    <button onclick="applyGolden()" class="bg-yellow-500 text-black px-4 py-1 rounded-full text-[10px] font-black shadow-lg shadow-yellow-500/10">اللمسة الذهبية ✨</button>
                 </div>
+                <input type="range" id="sat" min="1" max="4" step="0.1" value="2.0" oninput="draw()" class="w-full accent-purple-500 h-1.5 bg-white/5 rounded-full appearance-none">
                 
-                <div class="bg-white/5 p-6 rounded-[2rem] border border-white/5 flex gap-4">
-                    <i data-lucide="mouse-pointer-2" class="w-5 h-5 text-purple-500 shrink-0"></i>
-                    <p class="text-[9px] text-gray-500 font-bold italic leading-relaxed uppercase">
-                        iPad Optimized: All edits are processed locally on your device for maximum privacy and speed.
-                    </p>
+                <div id="action-area">
+                    <button onclick="renderVideo()" id="render-btn" class="w-full bg-white text-black py-5 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <i data-lucide="download-cloud" class="w-6 h-6"></i> تصدير المقطع
+                    </button>
+                </div>
+
+                <div id="download-zone" class="hidden space-y-4 animate-in fade-in slide-in-from-bottom-4">
+                    <div class="bg-green-500/10 border border-green-500/20 p-4 rounded-2xl flex items-center gap-3">
+                        <i data-lucide="check-circle" class="text-green-500"></i>
+                        <span class="text-green-500 text-xs font-bold">تم التصدير بنجاح يا عزام!</span>
+                    </div>
+                    <a id="download-link" href="#" download="AZZAM_EDIT.mp4" class="w-full bg-purple-600 text-white py-6 rounded-[2rem] font-black text-xl text-center block shadow-xl">تحميل الفيديو الآن</a>
+                    <button onclick="location.reload()" class="w-full text-gray-600 text-[10px] font-bold uppercase tracking-widest py-2">تعديل مقطع جديد</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <canvas id="export-canvas" class="hidden"></canvas>
-
     <script>
-        // تفعيل الأيقونات
         lucide.createIcons();
-
         const pin = "2193";
         const video = document.getElementById('source-video');
         const previewCanvas = document.getElementById('preview-canvas');
-        const exportCanvas = document.getElementById('export-canvas');
-        const ctx = previewCanvas.getContext('2d');
-        
+        const ctx = previewCanvas.getContext('2d', { alpha: false });
+        let isRendering = false;
+
         function checkPin() {
-            const input = document.getElementById('pin-input').value;
-            if(input === pin) {
-                document.getElementById('lock-screen').classList.add('opacity-0', 'pointer-events-none');
-                const app = document.getElementById('app-content');
-                app.classList.remove('hidden');
-                setTimeout(() => app.classList.add('opacity-100'), 50);
-            } else {
-                document.getElementById('error-msg').classList.remove('hidden');
+            if(document.getElementById('pin-input').value === pin) {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('app-content').classList.remove('hidden');
+                setTimeout(() => document.getElementById('app-content').style.opacity = '1', 50);
             }
         }
 
@@ -190,99 +114,89 @@
                 document.getElementById('upload-zone').classList.add('hidden');
                 document.getElementById('editor-zone').classList.remove('hidden');
                 video.onloadedmetadata = () => {
+                    video.loop = true; // نفعله فقط للمعاينة
                     video.play();
-                    startPreviewLoop();
+                    requestAnimationFrame(draw);
                 };
             }
         }
 
-        function updateFilters() {
+        function draw() {
+            if (isRendering) return; // نوقف رسم المعاينة إذا كنا نصدر
             const sat = document.getElementById('sat').value;
-            const con = document.getElementById('con').value;
-            document.getElementById('val-sat').innerText = sat + 'x';
-            document.getElementById('val-con').innerText = con + 'x';
+            ctx.filter = `saturate(${sat}) contrast(1.25) brightness(1.05)`;
+            ctx.drawImage(video, 0, 0, previewCanvas.width, previewCanvas.height);
+            if(!video.paused) requestAnimationFrame(draw);
         }
 
         function applyGolden() {
-            document.getElementById('sat').value = 2.5;
-            document.getElementById('con').value = 1.4;
-            updateFilters();
-        }
-
-        function startPreviewLoop() {
-            function loop() {
-                if(!video.paused || !video.ended) {
-                    const sat = document.getElementById('sat').value;
-                    const con = document.getElementById('con').value;
-                    
-                    ctx.filter = `saturate(${sat}) contrast(${con}) brightness(1.1)`;
-                    
-                    const scale = Math.max(previewCanvas.width / video.videoWidth, previewCanvas.height / video.videoHeight);
-                    const x = (previewCanvas.width / 2) - (video.videoWidth / 2) * scale;
-                    const y = (previewCanvas.height / 2) - (video.videoHeight / 2) * scale;
-                    
-                    ctx.clearRect(0,0, previewCanvas.width, previewCanvas.height);
-                    ctx.drawImage(video, x, y, video.videoWidth * scale, video.videoHeight * scale);
-                }
-                requestAnimationFrame(loop);
-            }
-            loop();
+            document.getElementById('sat').value = 2.8;
+            draw();
         }
 
         async function renderVideo() {
+            isRendering = true;
             const overlay = document.getElementById('processing-overlay');
             const progBar = document.getElementById('progress-bar');
             const progText = document.getElementById('progress-text');
+            const btn = document.getElementById('render-btn');
             
             overlay.classList.remove('hidden');
+            btn.disabled = true;
+
+            // أهم خطوة: إيقاف الـ Loop وإرجاع الفيديو للصفر
+            video.loop = false;
             video.pause();
             video.currentTime = 0;
 
-            const exportCtx = exportCanvas.getContext('2d');
-            exportCanvas.width = 1080;
-            exportCanvas.height = 1920;
+            // ننتظر قليلاً للتأكد أن الفيديو جاهز
+            await new Promise(r => setTimeout(r, 500));
 
-            const stream = exportCanvas.captureStream(60);
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 40000000 });
+            const stream = previewCanvas.captureStream(30);
+            const recorder = new MediaRecorder(stream, { 
+                mimeType: 'video/webm;codecs=vp8', 
+                videoBitsPerSecond: 12000000 
+            });
+            
             const chunks = [];
+            recorder.ondataavailable = e => {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
 
-            recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: 'video/mp4' });
                 const url = URL.createObjectURL(blob);
                 document.getElementById('download-link').href = url;
-                document.getElementById('action-buttons').classList.add('hidden');
+                document.getElementById('action-area').classList.add('hidden');
                 document.getElementById('download-zone').classList.remove('hidden');
                 overlay.classList.add('hidden');
+                isRendering = false;
             };
 
             recorder.start();
-            
             video.play();
-            
-            const renderFrame = () => {
-                if(video.paused || video.ended) {
+
+            const trackProgress = () => {
+                // شرط الإيقاف الصارم: إذا وصل الفيديو للنهاية
+                if(video.ended) {
                     recorder.stop();
+                    video.pause();
                     return;
                 }
-                
+
+                // رسم الفريمات أثناء التصدير
                 const sat = document.getElementById('sat').value;
-                const con = document.getElementById('con').value;
-                exportCtx.filter = `saturate(${sat}) contrast(${con}) brightness(1.1)`;
-                
-                const scale = Math.max(exportCanvas.width / video.videoWidth, exportCanvas.height / video.videoHeight);
-                const x = (exportCanvas.width / 2) - (video.videoWidth / 2) * scale;
-                const y = (exportCanvas.height / 2) - (video.videoHeight / 2) * scale;
-                
-                exportCtx.drawImage(video, x, y, video.videoWidth * scale, video.videoHeight * scale);
-                
-                let p = Math.floor((video.currentTime / video.duration) * 100);
+                ctx.filter = `saturate(${sat}) contrast(1.25) brightness(1.05)`;
+                ctx.drawImage(video, 0, 0, previewCanvas.width, previewCanvas.height);
+
+                let p = Math.min(Math.floor((video.currentTime / video.duration) * 100), 100);
                 progBar.style.width = p + '%';
                 progText.innerText = p + '%';
                 
-                requestAnimationFrame(renderFrame);
+                if (!video.ended) requestAnimationFrame(trackProgress);
             };
-            renderFrame();
+            
+            trackProgress();
         }
     </script>
 </body>
