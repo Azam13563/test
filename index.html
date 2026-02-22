@@ -2,334 +2,458 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <>titleAZZAM CUT | V3 ENGINE (SMOOTH 60FPS)</title>
-    <!-- استيراد مكتبات Tailwind و Lucide -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Az Cut | Ultra Pro Editor</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- استيراد مكتبة SweetAlert2 الاحترافية -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Noto+Sans+Arabic:wght@700;900&display=swap');
-        body { background: #030303; color: #fff; font-family: 'Noto Sans Arabic', sans-serif; overflow-x: hidden; }
-        .font-pro { font-family: 'Orbitron', sans-serif; }
-        .neon-box { box-shadow: 0 0 30px rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); }
-        .canvas-container { border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateZ(0); /* تسريع عتادي GPU للسلاسة */ }
-        input[type=range] { -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #a855f7; cursor: pointer; box-shadow: 0 0 10px #a855f7; }
-        .preset-btn.active { background: #a855f7; border-color: #d8b4fe; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); color: white; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
+        
+        :root {
+            --primary: #a855f7;
+            --secondary: #3b82f6;
+            --accent: #ff0050;
+            --bg: #050505;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-impact { font-family: 'Inter', sans-serif; font-weight: 900; }
+
+        /* Premium Interface Elements */
+        .glass-ui {
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .viewport-box {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 2rem;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 0 60px rgba(168, 85, 247, 0.05);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Control Components */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px; width: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-action:active { transform: scale(0.95); }
+        .btn-active { 
+            background: var(--primary) !important; 
+            border-color: #fff !important;
+            color: white !important;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #fff, #a855f7, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col p-4 md:p-8">
 
-    <!-- شاشة الدخول -->
-    <div id="lock-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6 transition-all duration-500">
-        <div class="w-full max-w-sm bg-[#080808] rounded-[2.5rem] p-10 text-center neon-box">
-            <div class="w-20 h-20 bg-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_#a855f7]">
-                <i data-lucide="cpu" class="w-10 h-10 text-white"></i>
+    <!-- Auth Shield -->
+    <div id="auth-overlay" class="fixed inset-0 z-[1000] bg-black flex items-center justify-center p-6">
+        <div class="max-w-md w-full glass-ui rounded-[3rem] p-12 text-center border-purple-500/30">
+            <div class="relative mb-8 inline-block">
+                <div class="w-28 h-28 bg-gradient-to-br from-purple-600 to-blue-600 rounded-[2.5rem] flex items-center justify-center shadow-2xl animate-bounce">
+                    <i data-lucide="shield-check" class="w-14 h-14 text-white"></i>
+                </div>
             </div>
-            <h1 class="text-3xl font-black mb-6 font-pro italic tracking-widest">V3 <span class="text-purple-500">SMOOTH</span></h1>
-            <input type="password" id="pin-input" placeholder="CODE" maxlength="4" class="w-full bg-black border border-white/10 rounded-2xl p-4 text-center text-3xl font-pro outline-none text-white mb-6 focus:border-purple-500 transition-all">
-            <button onclick="checkPin()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">تشغيل بـ 60 إطار</button>
+            <h1 class="text-5xl font-impact italic tracking-tighter mb-2 shimmer-text">AZ CUT</h1>
+            <p class="text-gray-500 text-[10px] font-bold tracking-[0.5em] uppercase mb-10">Neural Rendering Engine vFinal</p>
+            <div class="space-y-4">
+                <input type="password" id="entry-pin" placeholder="PIN" maxlength="4" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-center text-4xl font-impact outline-none focus:border-purple-500 transition-all text-white">
+                <button onclick="bootSystem()" class="w-full bg-white text-black py-6 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all shadow-xl">START ENGINE</button>
+            </div>
         </div>
     </div>
 
-    <!-- واجهة المستخدم -->
-    <div id="app-content" class="hidden opacity-0 transition-opacity duration-700 p-4 md:p-8 max-w-[1400px] mx-auto">
-        <header class="flex flex-wrap items-center justify-between mb-8 p-4 md:p-6 bg-[#0a0a0a] rounded-[2rem] border border-white/5">
-            <div class="flex items-center gap-3">
-                <i data-lucide="activity" class="text-purple-500 w-8 h-8"></i>
-                <h1 class="text-2xl font-black font-pro italic">AZZAM <span class="text-purple-500">PRO</span></h1>
+    <!-- Main Workspace -->
+    <div id="workspace" class="hidden opacity-0 flex-1 flex flex-col max-w-[1700px] mx-auto w-full">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8 glass-ui p-6 rounded-[2.5rem]">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-purple-500/10 rounded-2xl border border-purple-500/20">
+                    <i data-lucide="cpu" class="text-purple-500 w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-impact italic tracking-tighter uppercase">Az <span class="text-purple-500">Cut Ultra</span></h2>
+                    <div class="flex items-center gap-2">
+                        <div class="status-dot"></div>
+                        <span class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">System Online: HDR Enabled</span>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-xl border border-green-500/20">
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-bold text-green-500 tracking-[0.2em] uppercase">Ultra Smooth 60FPS</span>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAudio()" id="audio-toggle" class="w-12 h-12 glass-ui rounded-2xl flex items-center justify-center border-white/5 hover:bg-white/5 transition-all">
+                    <i data-lucide="volume-2" id="audio-icon" class="text-purple-400 w-5 h-5"></i>
+                </button>
+                <button onclick="location.reload()" class="w-12 h-12 glass-ui rounded-2xl flex items-center justify-center border-white/5 hover:bg-white/5 transition-all text-red-500">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
             </div>
         </header>
 
-        <div id="upload-zone" class="bg-[#0a0a0a] border-2 border-dashed border-purple-500/30 rounded-[3rem] p-16 md:p-32 text-center cursor-pointer hover:border-purple-500 transition-all group">
-            <input type="file" id="video-in" class="hidden" accept="video/*" onchange="handleFile(event)">
-            <label for="video-in" class="cursor-pointer block">
-                <div class="bg-purple-500/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                    <i data-lucide="video" class="w-10 h-10 text-purple-500"></i>
+        <!-- Editor Core -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-10 overflow-hidden pb-6">
+            <!-- Viewer -->
+            <div class="lg:col-span-8 flex flex-col gap-6 overflow-y-auto">
+                <div id="init-upload" onclick="document.getElementById('file-picker').click()" class="viewport-box aspect-[9/16] max-h-[75vh] flex flex-col items-center justify-center border-2 border-dashed border-purple-500/20 cursor-pointer hover:bg-purple-500/5 group transition-all">
+                    <input type="file" id="file-picker" class="hidden" accept="video/*" onchange="handleVideo(event)">
+                    <div class="w-24 h-24 bg-purple-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all border border-purple-500/20">
+                        <i data-lucide="plus" class="w-12 h-12 text-purple-500"></i>
+                    </div>
+                    <h3 class="text-3xl font-black italic tracking-tighter">IMPORT HIGHLIGHT</h3>
+                    <p class="text-gray-600 text-[10px] mt-2 font-bold uppercase tracking-[0.3em]">Supports 4K Raw Video Files</p>
                 </div>
-                <h2 class="text-3xl font-black italic mb-2">استيراد اللقطة</h2>
-                <p class="text-gray-500 font-bold text-xs">Supports 60FPS / 4K</p>
-            </label>
-        </div>
 
-        <div id="editor-zone" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- شاشة العرض (المزامنة الدقيقة) -->
-            <div class="lg:col-span-8 relative">
-                <div class="canvas-container relative bg-black aspect-[9/16] max-h-[75vh] mx-auto border border-white/10 flex items-center justify-center">
-                    <!-- تم إيقاف willReadFrequently للحصول على أقصى سرعة GPU للسلاسة -->
-                    <canvas id="preview-canvas" class="w-full h-full object-contain"></canvas>
-                    <video id="source-video" class="hidden" playsinline crossorigin="anonymous"></video>
+                <div id="video-stage" class="hidden viewport-box aspect-[9/16] max-h-[75vh]">
+                    <canvas id="view-canvas"></canvas>
+                    <video id="v-hidden" class="hidden" playsinline crossorigin="anonymous"></video>
+                    
+                    <!-- Real-time Quality Badge -->
+                    <div class="absolute top-6 left-6 flex items-center gap-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10">
+                        <i data-lucide="sparkles" class="w-3 h-3 text-yellow-400"></i>
+                        <span class="text-[9px] font-black uppercase tracking-widest text-white">Ultra CC Applied</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- لوحة التحكم -->
-            <div class="lg:col-span-4 space-y-6">
-                <div class="bg-[#0a0a0a] rounded-[2.5rem] p-6 md:p-8 border border-white/5 shadow-2xl">
-                    <div class="mb-8">
-                        <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase italic block mb-4">PUBG Pro Filters</span>
-                        
-                        <!-- أزرار الفلاتر الجاهزة -->
-                        <div class="grid grid-cols-5 gap-2 mb-6">
-                            <button onclick="applyPreset(1, this)" class="preset-btn active border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
-                                <span class="font-pro text-lg font-black">1</span>
-                                <span class="text-[8px] text-gray-400 mt-1 uppercase">طبيعي</span>
-                            </button>
-                            <button onclick="applyPreset(2, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
-                                <span class="font-pro text-lg font-black">2</span>
-                                <span class="text-[8px] text-gray-400 mt-1 uppercase">حيوي</span>
-                            </button>
-                            <button onclick="applyPreset(3, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
-                                <span class="font-pro text-lg font-black">3</span>
-                                <span class="text-[8px] text-gray-400 mt-1 uppercase">حاد</span>
-                            </button>
-                            <button onclick="applyPreset(4, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
-                                <span class="font-pro text-lg font-black">4</span>
-                                <span class="text-[8px] text-gray-400 mt-1 uppercase">ذهبي</span>
-                            </button>
-                            <button onclick="applyPreset(5, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
-                                <span class="font-pro text-lg font-black text-red-400">5</span>
-                                <span class="text-[8px] text-gray-400 mt-1 uppercase">ماكس</span>
-                            </button>
+            <!-- Controls Panel -->
+            <div id="control-panel" class="hidden lg:col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
+                <div class="glass-ui rounded-[3rem] p-8 space-y-10 border-white/5">
+                    
+                    <!-- Aspect Ratio -->
+                    <div class="space-y-4">
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] italic">Dimensions الأبعاد</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="setRatio(false, this)" class="ratio-btn btn-active bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all">Original</button>
+                            <button onclick="setRatio(true, this)" class="ratio-btn bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all italic">9:16 Vertical</button>
                         </div>
                     </div>
 
-                    <div class="space-y-8">
-                        <!-- التشبع -->
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-xs font-black uppercase">
-                                <span class="text-gray-400">Saturation (الألوان)</span>
-                                <span id="val-sat" class="text-purple-500">1.2x</span>
+                    <!-- Quality Presets -->
+                    <div class="space-y-4">
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] italic">Smart CC Presets فلاتر</p>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button onclick="setPreset(0, this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm transition-all">1</button>
+                            <button onclick="setPreset(1, this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm transition-all">2</button>
+                            <button onclick="setPreset(2, this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm transition-all">3</button>
+                            <button onclick="setPreset(3, this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm transition-all">4</button>
+                            <button onclick="setPreset(4, this)" class="preset-btn btn-active bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm transition-all">5</button>
+                        </div>
+                    </div>
+
+                    <!-- Pro Adjustments -->
+                    <div class="space-y-8 pt-4">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <label class="text-[11px] font-black uppercase italic text-gray-400 tracking-widest">Saturation الألوان</label>
+                                <span id="sat-lbl" class="text-purple-500 font-impact text-xs tracking-tighter">1.8x</span>
                             </div>
-                            <input type="range" id="sat" min="1" max="3" step="0.1" value="1.2" oninput="customFilter()" class="w-full">
+                            <input type="range" id="sat-rng" min="1" max="3" step="0.1" value="1.8" oninput="applyManual()" class="w-full">
                         </div>
 
-                        <!-- التباين -->
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-xs font-black uppercase">
-                                <span class="text-gray-400">Contrast (الحدة)</span>
-                                <span id="val-con" class="text-blue-500">1.1x</span>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <label class="text-[11px] font-black uppercase italic text-gray-400 tracking-widest">Sharpness الحدة</label>
+                                <span id="con-lbl" class="text-blue-500 font-impact text-xs tracking-tighter">1.4x</span>
                             </div>
-                            <input type="range" id="con" min="1" max="2" step="0.05" value="1.1" oninput="customFilter()" class="w-full">
+                            <input type="range" id="con-rng" min="1" max="2.5" step="0.05" value="1.4" oninput="applyManual()" class="w-full">
                         </div>
 
-                        <button onclick="startExport()" id="render-btn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-5 rounded-2xl font-black text-xl hover:opacity-90 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-                            <i data-lucide="zap" class="w-5 h-5 fill-current"></i> تصدير بأعلى سلاسة
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <label class="text-[11px] font-black uppercase italic text-gray-400 tracking-widest">HDR Bloom اللمعان</label>
+                                <span id="hdr-lbl" class="text-yellow-500 font-impact text-xs tracking-tighter">0.15x</span>
+                            </div>
+                            <input type="range" id="hdr-rng" min="0" max="0.5" step="0.05" value="0.15" oninput="applyManual()" class="w-full">
+                        </div>
+                    </div>
+
+                    <!-- Final Export -->
+                    <div class="pt-6">
+                        <button onclick="triggerExport()" class="w-full bg-white text-black py-7 rounded-[2.5rem] font-black text-xl italic uppercase tracking-tighter hover:bg-purple-600 hover:text-white transition-all shadow-2xl flex items-center justify-center gap-4 group active:scale-95">
+                            <i data-lucide="arrow-down-to-line" class="w-7 h-7 group-hover:animate-bounce"></i>
+                            Export HDR Video
                         </button>
                     </div>
                 </div>
+
+                <div class="p-6 glass-ui rounded-[2rem] text-center border-purple-500/10">
+                    <p class="text-[8px] text-gray-500 font-bold uppercase tracking-[0.4em]">Engine: 50.0 Mbps Bitrate Ready</p>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Export Overlay -->
+    <div id="export-modal" class="hidden fixed inset-0 z-[2000] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center p-12 text-center">
+        <div class="relative w-32 h-32 mb-12">
+            <svg class="w-full h-full animate-spin text-purple-600" viewBox="0 0 24 24">
+                <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"></circle>
+                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center font-impact text-xl italic">AZ</div>
+        </div>
+        <h2 class="text-4xl font-impact italic tracking-tighter mb-4 shimmer-text">RENDERING CINEMATIC HDR</h2>
+        <p class="text-gray-500 font-bold text-[10px] uppercase tracking-[0.4em] mb-12">Neural Up-scaling in Progress...</p>
+        
+        <div class="w-full max-w-md bg-white/5 h-1.5 rounded-full overflow-hidden mb-6">
+            <div id="p-bar" class="bg-gradient-to-r from-purple-600 to-blue-500 h-full w-0 transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.5)]"></div>
+        </div>
+        <p id="p-text" class="font-impact text-6xl text-white">0%</p>
     </div>
 
     <script>
         lucide.createIcons();
-        const pin = "2193";
-        const video = document.getElementById('source-video');
-        const canvas = document.getElementById('preview-canvas');
-        // السر هنا للسلاسة: alpha: false يخبر المتصفح بإلغاء معالجة الشفافية، وعدم استخدام willReadFrequently يجعل المعالجة بالـ GPU
-        const ctx = canvas.getContext('2d', { alpha: false }); 
+        const PIN = "2193";
+        const video = document.getElementById('v-hidden');
+        const canvas = document.getElementById('view-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
         
+        let isVertical = false;
         let isExporting = false;
-        let animationFrameId;
-        
-        // الفلتر النشط حالياً (الافتراضي فلتر 1)
-        let activeFilterString = 'saturate(1.2) contrast(1.1) brightness(1.05)';
+        let config = { sat: 1.8, con: 1.4, hdr: 0.15 };
 
-        function checkPin() {
-            if(document.getElementById('pin-input').value === pin) {
-                document.getElementById('lock-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('lock-screen').style.display = 'none';
-                    const app = document.getElementById('app-content');
-                    app.classList.remove('hidden');
-                    setTimeout(() => app.style.opacity = '1', 50);
-                }, 500);
+        function bootSystem() {
+            if(document.getElementById('entry-pin').value === PIN) {
+                gsap.to("#auth-overlay", { y: -2000, duration: 1.2, ease: "expo.inOut", onComplete: () => {
+                    document.getElementById('auth-overlay').style.display = 'none';
+                    const ws = document.getElementById('workspace');
+                    ws.classList.remove('hidden');
+                    gsap.to(ws, { opacity: 1, duration: 1 });
+                }});
+            } else {
+                gsap.to("#entry-pin", { x: 20, duration: 0.1, repeat: 3, yoyo: true });
+                Swal.fire({ icon: 'error', title: 'رمز خاطئ', background: '#0a0a0a', color: '#fff' });
             }
         }
 
-        function handleFile(e) {
+        function handleVideo(e) {
             const file = e.target.files[0];
-            if(file) {
-                const url = URL.createObjectURL(file);
-                video.src = url;
-                document.getElementById('upload-zone').classList.add('hidden');
-                document.getElementById('editor-zone').classList.remove('hidden');
-                
-                video.onloadedmetadata = () => {
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    video.loop = true;
-                    video.muted = true;
-                    video.play().catch(e => console.log(e));
-                    startDrawingLoop();
-                };
+            if(!file) return;
+
+            Swal.fire({ title: 'تحميل اللقطة الخام...', background: '#000', color: '#fff', showConfirmButton: false, timer: 1000 });
+
+            video.src = URL.createObjectURL(file);
+            video.onloadedmetadata = () => {
+                document.getElementById('init-upload').classList.add('hidden');
+                document.getElementById('video-stage').classList.remove('hidden');
+                document.getElementById('control-panel').classList.remove('hidden');
+                adjustViewport();
+                video.play();
+                engineLoop();
+            };
+        }
+
+        function adjustViewport() {
+            if(isVertical) {
+                canvas.width = 1080;
+                canvas.height = 1920;
+            } else {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
             }
         }
 
-        function updateUI() {
-            document.getElementById('val-sat').innerText = document.getElementById('sat').value + 'x';
-            document.getElementById('val-con').innerText = document.getElementById('con').value + 'x';
+        function setRatio(v, btn) {
+            isVertical = v;
+            document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('btn-active'));
+            btn.classList.add('btn-active');
+            adjustViewport();
         }
 
-        // تطبيق الفلاتر الجاهزة
-        function applyPreset(num, btnElement) {
-            // إزالة التفعيل من كل الأزرار
-            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-            // تفعيل الزر المضغوط
-            if(btnElement) btnElement.classList.add('active');
-
-            switch(num) {
-                case 1: // طبيعي (ألوان واقعية لببجي)
-                    document.getElementById('sat').value = 1.2;
-                    document.getElementById('con').value = 1.1;
-                    activeFilterString = 'saturate(1.2) contrast(1.1) brightness(1.05)';
-                    break;
-                case 2: // حيوي (ممتاز لماب إرانغل)
-                    document.getElementById('sat').value = 1.8;
-                    document.getElementById('con').value = 1.2;
-                    activeFilterString = 'saturate(1.8) contrast(1.2) brightness(1.1)';
-                    break;
-                case 3: // سينمائي حاد (حدة عالية وتباين قوي)
-                    document.getElementById('sat').value = 1.1;
-                    document.getElementById('con').value = 1.4;
-                    activeFilterString = 'saturate(1.1) contrast(1.4) brightness(0.95)';
-                    break;
-                case 4: // ذهبي دافئ
-                    document.getElementById('sat').value = 1.5;
-                    document.getElementById('con').value = 1.25;
-                    activeFilterString = 'sepia(0.2) saturate(1.5) contrast(1.25) brightness(1.05)';
-                    break;
-                case 5: // ألترا ماكس (أقصى سطوع وتشبع للقطات الهايلايت)
-                    document.getElementById('sat').value = 2.0;
-                    document.getElementById('con').value = 1.5;
-                    activeFilterString = 'saturate(2.0) contrast(1.5) brightness(1.1)';
-                    break;
-            }
-            updateUI();
+        function setPreset(i, btn) {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('btn-active'));
+            btn.classList.add('btn-active');
+            const presets = [
+                {s:1.2, c:1.1, h:0.05}, {s:1.6, c:1.2, h:0.1}, {s:1.4, c:1.5, h:0.15}, {s:1.9, c:1.3, h:0.2}, {s:2.3, c:1.6, h:0.25}
+            ];
+            config = presets[i];
+            syncInputs();
         }
 
-        // في حال المستخدم عدل الأشرطة يدوياً، يتم تفعيل الفلتر المخصص وإلغاء الأزرار
-        function customFilter() {
-            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-            const sat = document.getElementById('sat').value;
-            const con = document.getElementById('con').value;
-            activeFilterString = `saturate(${sat}) contrast(${con})`;
-            updateUI();
+        function applyManual() {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('btn-active'));
+            config.sat = document.getElementById('sat-rng').value;
+            config.con = document.getElementById('con-rng').value;
+            config.hdr = document.getElementById('hdr-rng').value;
+            syncLabels();
         }
 
-        // محرك الرسم (بأعلى سلاسة GPU)
-        function drawFrame() {
-            if (!isExporting && !video.paused && !video.ended) {
-                ctx.filter = activeFilterString;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            }
+        function syncInputs() {
+            document.getElementById('sat-rng').value = config.sat;
+            document.getElementById('con-rng').value = config.con;
+            document.getElementById('hdr-rng').value = config.hdr;
+            syncLabels();
+        }
+
+        function syncLabels() {
+            document.getElementById('sat-lbl').innerText = config.sat + 'x';
+            document.getElementById('con-lbl').innerText = config.con + 'x';
+            document.getElementById('hdr-lbl').innerText = config.hdr + 'x';
+        }
+
+        function drawProcessing() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            if ('requestVideoFrameCallback' in video) {
-                video.requestVideoFrameCallback(drawFrame);
+            let dw, dh, dx, dy;
+            if(isVertical) {
+                const ratio = video.videoWidth / video.videoHeight;
+                dw = canvas.height * ratio;
+                dh = canvas.height;
+                dx = (canvas.width - dw) / 2;
+                dy = 0;
             } else {
-                animationFrameId = requestAnimationFrame(drawFrame);
+                dx = 0; dy = 0; dw = canvas.width; dh = canvas.height;
             }
+
+            // Layer 1: Core CC & Sharpness
+            ctx.filter = `saturate(${config.sat}) contrast(${config.con}) brightness(1.05)`;
+            ctx.drawImage(video, dx, dy, dw, dh);
+
+            // Layer 2: HDR Bloom (Screen Overlay)
+            if(config.hdr > 0) {
+                ctx.globalCompositeOperation = 'screen';
+                ctx.globalAlpha = config.hdr;
+                ctx.filter = `blur(15px) brightness(1.8) saturate(1.5)`;
+                ctx.drawImage(video, dx, dy, dw, dh);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1.0;
+            }
+
+            // Layer 3: Edge Sharpening (The Master Trick)
+            // نكرر الرسم مع إزاحة 0.5 بكسل لإعطاء حدة بصرية قوية جداً
+            ctx.globalAlpha = 0.3;
+            ctx.filter = `contrast(1.4) grayscale(0.5)`;
+            ctx.drawImage(video, dx - 0.5, dy - 0.5, dw, dh);
+            ctx.globalAlpha = 1.0;
+            ctx.filter = 'none';
         }
 
-        function startDrawingLoop() {
-            if ('requestVideoFrameCallback' in video) {
-                video.requestVideoFrameCallback(drawFrame);
-            } else {
-                drawFrame();
-            }
+        function engineLoop() {
+            if(!isExporting && !video.paused) drawProcessing();
+            requestAnimationFrame(engineLoop);
         }
 
-        // التصدير بأعلى جودة وفريمات
-        async function startExport() {
+        function toggleAudio() {
+            video.muted = !video.muted;
+            document.getElementById('audio-icon').setAttribute('data-lucide', video.muted ? 'volume-x' : 'volume-2');
+            lucide.createIcons();
+        }
+
+        async function triggerExport() {
             isExporting = true;
-            video.loop = false;
             video.pause();
             video.currentTime = 0;
+            video.muted = false;
 
-            Swal.fire({
-                title: 'تصدير بـ 60 فريم...',
-                html: 'الرجاء عدم إغلاق الصفحة<br><br><b id="progress-text" style="color:#a855f7; font-size: 24px;">0%</b>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                background: '#0a0a0a',
-                color: '#fff',
-                didOpen: () => {
-                    Swal.showLoading();
-                }
+            document.getElementById('export-modal').classList.remove('hidden');
+
+            const stream = canvas.captureStream(60);
+            try {
+                const vs = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+                if(vs.getAudioTracks().length > 0) stream.addTrack(vs.getAudioTracks()[0]);
+            } catch(e) {}
+
+            const recorder = new MediaRecorder(stream, {
+                mimeType: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
+                videoBitsPerSecond: 50000000 // Ultra Bitrate
             });
 
-            await new Promise(r => setTimeout(r, 500));
-
-            let options = { mimeType: 'video/webm' }; 
-            const appleCodec = 'video/mp4; codecs="avc1.4d002a"'; 
-            
-            if (MediaRecorder.isTypeSupported(appleCodec)) {
-                options = { mimeType: appleCodec, videoBitsPerSecond: 20000000 }; // رفعنا الـ Bitrate إلى 20M لضمان عدم ضياع أي بكسل
-            } else if (MediaRecorder.isTypeSupported('video/webm; codecs=h264')) {
-                options = { mimeType: 'video/webm; codecs=h264', videoBitsPerSecond: 20000000 };
-            }
-
-            const stream = canvas.captureStream(60); 
-            const recorder = new MediaRecorder(stream, options);
             const chunks = [];
-
-            recorder.ondataavailable = e => {
-                if (e.data.size > 0) chunks.push(e.data);
-            };
-
+            recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
-                const ext = options.mimeType.includes('mp4') ? 'mp4' : 'webm';
-                const blob = new Blob(chunks, { type: options.mimeType });
+                const blob = new Blob(chunks, { type: 'video/mp4' });
                 const url = URL.createObjectURL(blob);
-                
-                isExporting = false;
                 
                 Swal.fire({
                     icon: 'success',
-                    title: 'تم التصدير بسلاسة مجنونة!',
-                    text: 'الفيديو جاهز بأعلى فريمات للآيباد',
-                    background: '#0a0a0a',
-                    color: '#fff',
-                    confirmButtonText: 'تحميل الفيديو',
-                    confirmButtonColor: '#a855f7',
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `AZZAM_60FPS_PRO.${ext}`;
-                        a.click();
-                        location.reload(); 
-                    }
+                    title: 'HDR EXPORT READY',
+                    text: 'تمت المعالجة بأعلى جودة تيك توك في العالم',
+                    background: '#000', color: '#fff', confirmButtonColor: '#a855f7'
+                }).then(() => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `AZ_CUT_ULTRA_CC.mp4`;
+                    a.click();
+                    location.reload();
                 });
             };
 
             recorder.start();
             video.play();
 
-            function renderExportFrame() {
-                if(video.ended) {
-                    recorder.stop();
-                    return;
-                }
-
-                // نستخدم نفس الفلتر النشط أثناء المعاينة
-                ctx.filter = activeFilterString;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                let p = Math.min(Math.floor((video.currentTime / video.duration) * 100), 100);
-                document.getElementById('progress-text').innerText = p + '%';
-
-                if(!video.ended) requestAnimationFrame(renderExportFrame);
-            }
-            
-            requestAnimationFrame(renderExportFrame);
+            const trackProgress = () => {
+                if(video.ended) { recorder.stop(); return; }
+                drawProcessing();
+                let p = Math.floor((video.currentTime / video.duration) * 100);
+                document.getElementById('p-bar').style.width = p + '%';
+                document.getElementById('p-text').innerText = p + '%';
+                requestAnimationFrame(trackProgress);
+            };
+            trackProgress();
         }
     </script>
 </body>
