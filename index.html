@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Az Cut | Ultra Pro Editor</title>
+    <title>Az Cut | TikTok & HDR Photo</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -15,6 +15,7 @@
         
         :root {
             --primary: #a855f7;
+            --tiktok: #ff0050;
             --bg: #050505;
         }
 
@@ -23,15 +24,14 @@
             color: #fff;
             font-family: 'Noto Sans Arabic', sans-serif;
             overflow-x: hidden;
-            user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
         .font-impact { font-family: 'Inter', sans-serif; font-weight: 900; }
 
         .glass-ui {
-            background: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(30px);
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -39,9 +39,10 @@
             position: relative;
             width: 100%;
             background: #000;
-            border-radius: 2rem;
+            border-radius: 2.5rem;
             overflow: hidden;
             border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         canvas { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -80,102 +81,129 @@
 <body class="min-h-screen flex flex-col p-4 md:p-8">
 
     <!-- Auth Shield -->
-    <div id="auth-overlay" class="fixed inset-0 z-[1000] bg-black flex items-center justify-center p-6">
-        <div class="max-w-md w-full glass-ui rounded-[3rem] p-12 text-center">
+    <div id="auth-overlay" class="fixed inset-0 z-[1000] bg-black flex items-center justify-center p-6 text-center">
+        <div class="max-w-md w-full glass-ui rounded-[3rem] p-12">
+            <div class="w-24 h-24 bg-purple-600 rounded-[2rem] mx-auto mb-6 flex items-center justify-center rotate-12 shadow-2xl">
+                <i data-lucide="zap" class="w-12 h-12 text-white fill-current"></i>
+            </div>
             <h1 class="text-5xl font-impact italic mb-2 shimmer-text">AZ CUT</h1>
-            <p class="text-gray-500 text-[10px] font-bold tracking-[0.5em] mb-10 uppercase">Ultra Engine v3.1</p>
+            <p class="text-gray-500 text-[10px] font-bold tracking-[0.5em] mb-10 uppercase">Hyper Rendering Engine</p>
             <div class="space-y-4">
                 <input type="password" id="entry-pin" placeholder="PIN" maxlength="4" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-center text-4xl font-impact outline-none focus:border-purple-500">
-                <button onclick="bootSystem()" class="w-full bg-white text-black py-6 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">START ENGINE</button>
+                <button onclick="bootSystem()" class="w-full bg-white text-black py-6 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">UNLEASH POWER</button>
             </div>
         </div>
     </div>
 
     <!-- Main Workspace -->
-    <div id="workspace" class="hidden opacity-0 flex-1 flex flex-col max-w-[1400px] mx-auto w-full">
+    <div id="workspace" class="hidden opacity-0 flex-1 flex flex-col max-w-[1600px] mx-auto w-full">
         <header class="flex items-center justify-between mb-8 glass-ui p-6 rounded-[2.5rem]">
-            <h2 class="text-xl font-impact italic uppercase">Az <span class="text-purple-500">Cut Ultra</span></h2>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 text-purple-400">
+                    <i data-lucide="video" class="w-5 h-5"></i>
+                </div>
+                <h2 class="text-xl font-impact italic uppercase">Az <span class="text-purple-500">Ultra</span></h2>
+            </div>
             <div class="flex gap-3">
-                <button onclick="toggleAudio()" class="w-12 h-12 glass-ui rounded-2xl flex items-center justify-center">
-                    <i data-lucide="volume-2" id="audio-icon" class="text-purple-400 w-5 h-5"></i>
+                <button onclick="takeScreenshot()" class="px-5 py-2 glass-ui rounded-xl flex items-center gap-2 text-xs font-bold border-white/10 hover:bg-white/10">
+                    <i data-lucide="camera" class="w-4 h-4 text-cyan-400"></i>
+                    PHOTO
                 </button>
-                <button onclick="location.reload()" class="w-12 h-12 glass-ui rounded-2xl flex items-center justify-center text-red-500">
-                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                <button onclick="toggleAudio()" class="w-12 h-12 glass-ui rounded-2xl flex items-center justify-center text-purple-400">
+                    <i data-lucide="volume-2" id="audio-icon" class="w-5 h-5"></i>
                 </button>
             </div>
         </header>
 
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 overflow-hidden">
-            <!-- Viewer -->
-            <div class="lg:col-span-7 flex flex-col gap-4">
-                <div id="init-upload" onclick="document.getElementById('file-picker').click()" class="viewport-box aspect-[9/16] flex flex-col items-center justify-center border-dashed border-2 cursor-pointer border-purple-500/30">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 overflow-hidden pb-4">
+            <!-- Viewer Section -->
+            <div class="lg:col-span-8 flex flex-col gap-4 overflow-y-auto">
+                <div id="init-upload" onclick="document.getElementById('file-picker').click()" class="viewport-box aspect-[9/16] max-h-[75vh] flex flex-col items-center justify-center border-dashed border-2 cursor-pointer border-purple-500/30 group">
                     <input type="file" id="file-picker" class="hidden" accept="video/*" onchange="handleVideo(event)">
-                    <i data-lucide="upload-cloud" class="w-12 h-12 text-purple-500 mb-4"></i>
-                    <h3 class="text-xl font-bold italic">IMPORT VIDEO</h3>
+                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
+                        <i data-lucide="plus" class="w-10 h-10 text-purple-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-black italic tracking-tighter">IMPORT HIGHLIGHT</h3>
                 </div>
 
-                <div id="video-stage" class="hidden viewport-box aspect-[9/16]">
+                <div id="video-stage" class="hidden viewport-box aspect-[9/16] max-h-[75vh]">
                     <canvas id="view-canvas"></canvas>
                     <video id="v-hidden" class="hidden" playsinline crossorigin="anonymous"></video>
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div id="control-panel" class="hidden lg:col-span-5 flex flex-col gap-6">
-                <div class="glass-ui rounded-[3rem] p-8 space-y-8">
+            <!-- Controls Panel -->
+            <div id="control-panel" class="hidden lg:col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
+                <div class="glass-ui rounded-[3rem] p-8 space-y-10">
                     
-                    <!-- Smart Filters -->
+                    <!-- Aspect Ratios (The Return) -->
                     <div class="space-y-4">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Engine Presets</p>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">Dimensions الأبعاد</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setPreset('HDR', this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm">HDR MODE</button>
-                            <button onclick="setPreset('PRO', this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-sm">PRO MODE</button>
+                            <button onclick="setRatio(false, this)" class="ratio-btn btn-active bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-[10px] uppercase">ORIGINAL</button>
+                            <button onclick="setRatio(true, this)" class="ratio-btn bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-[10px] uppercase italic">9:16 TIKTOK</button>
+                        </div>
+                    </div>
+
+                    <!-- Smart Presets -->
+                    <div class="space-y-4">
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">HDR PRO Presets</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setPreset('HDR', this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-xs">ULTRA HDR</button>
+                            <button onclick="setPreset('PRO', this)" class="preset-btn bg-white/5 border border-white/10 p-4 rounded-xl font-impact italic text-xs">SHARP PRO</button>
                         </div>
                     </div>
 
                     <!-- Manual Controls -->
-                    <div class="space-y-6">
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-[11px] font-bold text-gray-400 uppercase">
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-[11px] font-black uppercase text-gray-400">
                                 <span>Saturation الألوان</span>
                                 <span id="sat-lbl" class="text-purple-500">1.8</span>
                             </div>
                             <input type="range" id="sat-rng" min="1" max="3" step="0.1" value="1.8" oninput="updateValues()">
                         </div>
 
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-[11px] font-bold text-gray-400 uppercase">
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-[11px] font-black uppercase text-gray-400">
                                 <span>Sharpness الحدة</span>
                                 <span id="con-lbl" class="text-blue-500">1.4</span>
                             </div>
                             <input type="range" id="con-rng" min="1" max="2.5" step="0.05" value="1.4" oninput="updateValues()">
                         </div>
 
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-[11px] font-bold text-gray-400 uppercase">
-                                <span>Glow اللمعة</span>
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-[11px] font-black uppercase text-gray-400">
+                                <span>Glow اللمعة ديك</span>
                                 <span id="hdr-lbl" class="text-yellow-500">0.3</span>
                             </div>
                             <input type="range" id="hdr-rng" min="0" max="1" step="0.05" value="0.3" oninput="updateValues()">
                         </div>
                     </div>
 
-                    <button onclick="triggerExport()" class="w-full bg-white text-black py-6 rounded-3xl font-black text-xl italic uppercase hover:bg-purple-600 hover:text-white transition-all flex items-center justify-center gap-3">
-                        <i data-lucide="download" class="w-6 h-6"></i>
-                        Export 4K HDR
-                    </button>
+                    <!-- Export Actions -->
+                    <div class="flex flex-col gap-3">
+                        <button onclick="triggerExport('gallery')" class="w-full bg-white text-black py-6 rounded-[2rem] font-black text-xl italic uppercase hover:bg-purple-600 hover:text-white transition-all flex items-center justify-center gap-3">
+                            <i data-lucide="download" class="w-6 h-6"></i>
+                            Save HDR Video
+                        </button>
+                        <button onclick="triggerExport('tiktok')" class="w-full bg-[#ff0050] text-white py-6 rounded-[2rem] font-black text-xl italic uppercase hover:brightness-110 transition-all flex items-center justify-center gap-3">
+                            <i data-lucide="music-2" class="w-6 h-6"></i>
+                            Export to TikTok
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Export Overlay -->
-    <div id="export-modal" class="hidden fixed inset-0 z-[2000] bg-black flex flex-col items-center justify-center p-12">
-        <h2 class="text-3xl font-impact italic mb-8 shimmer-text">RENDERING VIDEO...</h2>
-        <div class="w-full max-w-sm bg-white/10 h-1.5 rounded-full overflow-hidden mb-4">
-            <div id="p-bar" class="bg-purple-500 h-full w-0 shadow-[0_0_15px_#a855f7]"></div>
+    <div id="export-modal" class="hidden fixed inset-0 z-[2000] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center p-12 text-center">
+        <h2 class="text-4xl font-impact italic mb-8 shimmer-text">PROCESSING HDR MASTER</h2>
+        <div class="w-full max-w-sm bg-white/10 h-1.5 rounded-full overflow-hidden mb-6">
+            <div id="p-bar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full w-0 transition-all"></div>
         </div>
-        <p id="p-text" class="text-5xl font-impact">0%</p>
+        <p id="p-text" class="text-6xl font-impact">0%</p>
     </div>
 
     <script>
@@ -185,8 +213,8 @@
         const canvas = document.getElementById('view-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
 
+        let isVertical = false;
         let isExporting = false;
-        // القيم محفوظة في كائن مركزي لا يصفر عند التبديل
         let config = { sat: 1.8, con: 1.4, hdr: 0.3 };
 
         function bootSystem() {
@@ -207,25 +235,35 @@
                 document.getElementById('init-upload').classList.add('hidden');
                 document.getElementById('video-stage').classList.remove('hidden');
                 document.getElementById('control-panel').classList.remove('hidden');
-                canvas.width = video.videoWidth; 
-                canvas.height = video.videoHeight;
+                adjustCanvas();
                 video.play();
-                requestAnimationFrame(loop);
+                requestAnimationFrame(mainLoop);
             };
         }
 
-        function setPreset(type, btn) {
-            // تحديث القيم بناء على النمط مع الحفاظ على البنية
-            if(type === 'HDR') {
-                config.sat = 2.0; config.con = 1.3; config.hdr = 0.45;
+        function adjustCanvas() {
+            if(isVertical) {
+                canvas.width = 1080; canvas.height = 1920;
             } else {
-                config.sat = 1.6; config.con = 1.6; config.hdr = 0.25;
+                canvas.width = video.videoWidth; canvas.height = video.videoHeight;
             }
-            
+        }
+
+        function setRatio(v, btn) {
+            isVertical = v;
+            document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('btn-active'));
+            btn.classList.add('btn-active');
+            adjustCanvas();
+        }
+
+        function setPreset(type, btn) {
+            if(type === 'HDR') {
+                config.sat = 2.1; config.con = 1.35; config.hdr = 0.45;
+            } else {
+                config.sat = 1.7; config.con = 1.6; config.hdr = 0.2;
+            }
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('btn-active'));
             btn.classList.add('btn-active');
-            
-            // تحديث السلايدرز لتطابق القيم الجديدة
             document.getElementById('sat-rng').value = config.sat;
             document.getElementById('con-rng').value = config.con;
             document.getElementById('hdr-rng').value = config.hdr;
@@ -245,53 +283,95 @@
             document.getElementById('hdr-lbl').innerText = config.hdr;
         }
 
-        function loop() {
-            if(!isExporting && !video.paused) {
-                render();
-            }
-            requestAnimationFrame(loop);
-        }
-
-        function render() {
-            ctx.clearRect(0,0, canvas.width, canvas.height);
+        function renderFrame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // الطبقة الأساسية (تعديل الألوان والحدة)
-            ctx.filter = `saturate(${config.sat}) contrast(${config.con}) brightness(1.05)`;
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let dw, dh, dx, dy;
+            if(isVertical) {
+                const ratio = video.videoWidth / video.videoHeight;
+                dw = canvas.height * ratio; dh = canvas.height;
+                dx = (canvas.width - dw) / 2; dy = 0;
+            } else {
+                dx = 0; dy = 0; dw = canvas.width; dh = canvas.height;
+            }
 
-            // نظام اللمعة "ديك" المتطور
+            // CC & Sharpness
+            ctx.filter = `saturate(${config.sat}) contrast(${config.con}) brightness(1.05)`;
+            ctx.drawImage(video, dx, dy, dw, dh);
+
+            // "اللمعة ديك" - Hyper HDR Glow
             if(config.hdr > 0) {
                 ctx.save();
                 ctx.globalCompositeOperation = 'screen';
-                // وهج ناعم (Bloom)
-                ctx.globalAlpha = config.hdr * 0.5;
-                ctx.filter = `blur(15px) brightness(1.5)`;
+                
+                // Bloom 1 (Soft Glow)
+                ctx.globalAlpha = config.hdr * 0.6;
+                ctx.filter = `blur(15px) brightness(1.8)`;
                 ctx.drawImage(canvas, 0, 0);
                 
-                // وهج حاد للمناطق الساطعة (Specular Highlight)
+                // Bloom 2 (Sharp Edge Glow for Weapons)
                 ctx.globalAlpha = config.hdr * 0.4;
-                ctx.filter = `blur(2px) brightness(2.0) saturate(1.5)`;
+                ctx.filter = `blur(2px) brightness(2.5) saturate(1.2)`;
                 ctx.drawImage(canvas, 0, 0);
+                
                 ctx.restore();
             }
+
+            // Extra Detail Extraction
+            ctx.globalAlpha = 0.2;
+            ctx.filter = `contrast(1.5) grayscale(1)`;
+            ctx.drawImage(video, dx - 1, dy - 1, dw, dh);
+            ctx.globalAlpha = 1.0;
+            ctx.filter = 'none';
         }
 
-        async function triggerExport() {
+        function mainLoop() {
+            if(!isExporting && !video.paused) renderFrame();
+            requestAnimationFrame(mainLoop);
+        }
+
+        function takeScreenshot() {
+            renderFrame();
+            const url = canvas.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `AzCut_HDR_Shot_${Date.now()}.png`;
+            a.click();
+            Swal.fire({ title: 'Photo Saved!', text: 'تم حفظ صورة HDR بنجاح', icon: 'success', background: '#111', color: '#fff' });
+        }
+
+        async function triggerExport(target) {
             isExporting = true;
-            video.pause(); video.currentTime = 0;
+            video.pause(); video.currentTime = 0; video.muted = false;
             document.getElementById('export-modal').classList.remove('hidden');
             
             const stream = canvas.captureStream(60);
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/mp4', videoBitsPerSecond: 25000000 });
-            const chunks = [];
+            try {
+                const vs = video.captureStream();
+                if(vs.getAudioTracks().length > 0) stream.addTrack(vs.getAudioTracks()[0]);
+            } catch(e) {}
+
+            const recorder = new MediaRecorder(stream, { 
+                mimeType: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
+                videoBitsPerSecond: 50000000 
+            });
             
+            const chunks = [];
             recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: 'video/mp4' });
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = "AzCut_Ultra_HDR.mp4";
+                a.href = url;
+                a.download = "AzCut_Ultra_Master.mp4";
                 a.click();
+
+                if(target === 'tiktok') {
+                    // محاكاة فتح تيك توك
+                    setTimeout(() => {
+                        window.open('https://www.tiktok.com/upload', '_blank');
+                    }, 1000);
+                }
                 location.reload();
             };
 
@@ -300,7 +380,7 @@
 
             const track = () => {
                 if(video.ended) { recorder.stop(); return; }
-                render();
+                renderFrame();
                 let p = Math.floor((video.currentTime / video.duration) * 100);
                 document.getElementById('p-bar').style.width = p + '%';
                 document.getElementById('p-text').innerText = p + '%';
