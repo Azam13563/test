@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZZAM CUT | V3 ENGINE</title>
+    <>titleAZZAM CUT | V3 ENGINE (SMOOTH 60FPS)</title>
     <!-- استيراد مكتبات Tailwind و Lucide -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,9 +14,10 @@
         body { background: #030303; color: #fff; font-family: 'Noto Sans Arabic', sans-serif; overflow-x: hidden; }
         .font-pro { font-family: 'Orbitron', sans-serif; }
         .neon-box { box-shadow: 0 0 30px rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); }
-        .canvas-container { border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .canvas-container { border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateZ(0); /* تسريع عتادي GPU للسلاسة */ }
         input[type=range] { -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #a855f7; cursor: pointer; box-shadow: 0 0 10px #a855f7; }
+        .preset-btn.active { background: #a855f7; border-color: #d8b4fe; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); color: white; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -27,9 +28,9 @@
             <div class="w-20 h-20 bg-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_#a855f7]">
                 <i data-lucide="cpu" class="w-10 h-10 text-white"></i>
             </div>
-            <h1 class="text-3xl font-black mb-6 font-pro italic tracking-widest">V3 <span class="text-purple-500">ENGINE</span></h1>
+            <h1 class="text-3xl font-black mb-6 font-pro italic tracking-widest">V3 <span class="text-purple-500">SMOOTH</span></h1>
             <input type="password" id="pin-input" placeholder="CODE" maxlength="4" class="w-full bg-black border border-white/10 rounded-2xl p-4 text-center text-3xl font-pro outline-none text-white mb-6 focus:border-purple-500 transition-all">
-            <button onclick="checkPin()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">تهيئة المحرك</button>
+            <button onclick="checkPin()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-xl hover:bg-purple-600 hover:text-white transition-all">تشغيل بـ 60 إطار</button>
         </div>
     </div>
 
@@ -42,7 +43,7 @@
             </div>
             <div class="flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-xl border border-green-500/20">
                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-bold text-green-500 tracking-[0.2em] uppercase">H.264 MP4 Codec Active</span>
+                <span class="text-[10px] font-bold text-green-500 tracking-[0.2em] uppercase">Ultra Smooth 60FPS</span>
             </div>
         </header>
 
@@ -61,6 +62,7 @@
             <!-- شاشة العرض (المزامنة الدقيقة) -->
             <div class="lg:col-span-8 relative">
                 <div class="canvas-container relative bg-black aspect-[9/16] max-h-[75vh] mx-auto border border-white/10 flex items-center justify-center">
+                    <!-- تم إيقاف willReadFrequently للحصول على أقصى سرعة GPU للسلاسة -->
                     <canvas id="preview-canvas" class="w-full h-full object-contain"></canvas>
                     <video id="source-video" class="hidden" playsinline crossorigin="anonymous"></video>
                 </div>
@@ -69,9 +71,32 @@
             <!-- لوحة التحكم -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="bg-[#0a0a0a] rounded-[2.5rem] p-6 md:p-8 border border-white/5 shadow-2xl">
-                    <div class="flex items-center justify-between mb-8">
-                        <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase italic">Color Grading</span>
-                        <button onclick="applyGolden()" class="bg-yellow-500 text-black px-4 py-1.5 rounded-lg text-[10px] font-black hover:bg-white transition-all shadow-lg shadow-yellow-500/20">اللون الذهبي 🔥</button>
+                    <div class="mb-8">
+                        <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase italic block mb-4">PUBG Pro Filters</span>
+                        
+                        <!-- أزرار الفلاتر الجاهزة -->
+                        <div class="grid grid-cols-5 gap-2 mb-6">
+                            <button onclick="applyPreset(1, this)" class="preset-btn active border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
+                                <span class="font-pro text-lg font-black">1</span>
+                                <span class="text-[8px] text-gray-400 mt-1 uppercase">طبيعي</span>
+                            </button>
+                            <button onclick="applyPreset(2, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
+                                <span class="font-pro text-lg font-black">2</span>
+                                <span class="text-[8px] text-gray-400 mt-1 uppercase">حيوي</span>
+                            </button>
+                            <button onclick="applyPreset(3, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
+                                <span class="font-pro text-lg font-black">3</span>
+                                <span class="text-[8px] text-gray-400 mt-1 uppercase">حاد</span>
+                            </button>
+                            <button onclick="applyPreset(4, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
+                                <span class="font-pro text-lg font-black">4</span>
+                                <span class="text-[8px] text-gray-400 mt-1 uppercase">ذهبي</span>
+                            </button>
+                            <button onclick="applyPreset(5, this)" class="preset-btn border border-white/10 bg-white/5 hover:bg-white/10 rounded-xl py-3 flex flex-col items-center justify-center transition-all">
+                                <span class="font-pro text-lg font-black text-red-400">5</span>
+                                <span class="text-[8px] text-gray-400 mt-1 uppercase">ماكس</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="space-y-8">
@@ -79,22 +104,22 @@
                         <div class="space-y-3">
                             <div class="flex justify-between text-xs font-black uppercase">
                                 <span class="text-gray-400">Saturation (الألوان)</span>
-                                <span id="val-sat" class="text-purple-500">1.5x</span>
+                                <span id="val-sat" class="text-purple-500">1.2x</span>
                             </div>
-                            <input type="range" id="sat" min="1" max="3" step="0.1" value="1.5" oninput="updateUI()" class="w-full">
+                            <input type="range" id="sat" min="1" max="3" step="0.1" value="1.2" oninput="customFilter()" class="w-full">
                         </div>
 
                         <!-- التباين -->
                         <div class="space-y-3">
                             <div class="flex justify-between text-xs font-black uppercase">
                                 <span class="text-gray-400">Contrast (الحدة)</span>
-                                <span id="val-con" class="text-blue-500">1.2x</span>
+                                <span id="val-con" class="text-blue-500">1.1x</span>
                             </div>
-                            <input type="range" id="con" min="1" max="2" step="0.05" value="1.2" oninput="updateUI()" class="w-full">
+                            <input type="range" id="con" min="1" max="2" step="0.05" value="1.1" oninput="customFilter()" class="w-full">
                         </div>
 
                         <button onclick="startExport()" id="render-btn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-5 rounded-2xl font-black text-xl hover:opacity-90 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-                            <i data-lucide="zap" class="w-5 h-5 fill-current"></i> تصدير للآيباد
+                            <i data-lucide="zap" class="w-5 h-5 fill-current"></i> تصدير بأعلى سلاسة
                         </button>
                     </div>
                 </div>
@@ -103,17 +128,19 @@
     </div>
 
     <script>
-        // تفعيل أيقونات المكتبة
         lucide.createIcons();
         const pin = "2193";
         const video = document.getElementById('source-video');
         const canvas = document.getElementById('preview-canvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true }); // تحسين أداء سحب الفريمات
+        // السر هنا للسلاسة: alpha: false يخبر المتصفح بإلغاء معالجة الشفافية، وعدم استخدام willReadFrequently يجعل المعالجة بالـ GPU
+        const ctx = canvas.getContext('2d', { alpha: false }); 
         
         let isExporting = false;
         let animationFrameId;
+        
+        // الفلتر النشط حالياً (الافتراضي فلتر 1)
+        let activeFilterString = 'saturate(1.2) contrast(1.1) brightness(1.05)';
 
-        // دالة الدخول
         function checkPin() {
             if(document.getElementById('pin-input').value === pin) {
                 document.getElementById('lock-screen').style.opacity = '0';
@@ -126,7 +153,6 @@
             }
         }
 
-        // معالجة الملف
         function handleFile(e) {
             const file = e.target.files[0];
             if(file) {
@@ -136,42 +162,74 @@
                 document.getElementById('editor-zone').classList.remove('hidden');
                 
                 video.onloadedmetadata = () => {
-                    // ضبط أبعاد الكانفاس الحقيقية لتطابق الفيديو (حفاظاً على جودة الـ 4K/1080p)
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     video.loop = true;
-                    video.muted = true; // مهم ليعمل التشغيل التلقائي في الآيباد
+                    video.muted = true;
                     video.play().catch(e => console.log(e));
                     startDrawingLoop();
                 };
             }
         }
 
-        // تحديث الأرقام في الواجهة
         function updateUI() {
             document.getElementById('val-sat').innerText = document.getElementById('sat').value + 'x';
             document.getElementById('val-con').innerText = document.getElementById('con').value + 'x';
         }
 
-        // اللمسة الذهبية
-        function applyGolden() {
-            document.getElementById('sat').value = 2.0;
-            document.getElementById('con').value = 1.3;
+        // تطبيق الفلاتر الجاهزة
+        function applyPreset(num, btnElement) {
+            // إزالة التفعيل من كل الأزرار
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            // تفعيل الزر المضغوط
+            if(btnElement) btnElement.classList.add('active');
+
+            switch(num) {
+                case 1: // طبيعي (ألوان واقعية لببجي)
+                    document.getElementById('sat').value = 1.2;
+                    document.getElementById('con').value = 1.1;
+                    activeFilterString = 'saturate(1.2) contrast(1.1) brightness(1.05)';
+                    break;
+                case 2: // حيوي (ممتاز لماب إرانغل)
+                    document.getElementById('sat').value = 1.8;
+                    document.getElementById('con').value = 1.2;
+                    activeFilterString = 'saturate(1.8) contrast(1.2) brightness(1.1)';
+                    break;
+                case 3: // سينمائي حاد (حدة عالية وتباين قوي)
+                    document.getElementById('sat').value = 1.1;
+                    document.getElementById('con').value = 1.4;
+                    activeFilterString = 'saturate(1.1) contrast(1.4) brightness(0.95)';
+                    break;
+                case 4: // ذهبي دافئ
+                    document.getElementById('sat').value = 1.5;
+                    document.getElementById('con').value = 1.25;
+                    activeFilterString = 'sepia(0.2) saturate(1.5) contrast(1.25) brightness(1.05)';
+                    break;
+                case 5: // ألترا ماكس (أقصى سطوع وتشبع للقطات الهايلايت)
+                    document.getElementById('sat').value = 2.0;
+                    document.getElementById('con').value = 1.5;
+                    activeFilterString = 'saturate(2.0) contrast(1.5) brightness(1.1)';
+                    break;
+            }
             updateUI();
         }
 
-        // محرك الرسم (السر الجديد للمزامنة الخالية من التقطيع)
+        // في حال المستخدم عدل الأشرطة يدوياً، يتم تفعيل الفلتر المخصص وإلغاء الأزرار
+        function customFilter() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            const sat = document.getElementById('sat').value;
+            const con = document.getElementById('con').value;
+            activeFilterString = `saturate(${sat}) contrast(${con})`;
+            updateUI();
+        }
+
+        // محرك الرسم (بأعلى سلاسة GPU)
         function drawFrame() {
             if (!isExporting && !video.paused && !video.ended) {
-                const sat = document.getElementById('sat').value;
-                const con = document.getElementById('con').value;
-                
-                // تطبيق الفلاتر بذكاء بدون سطوع يخرب الألوان
-                ctx.filter = `saturate(${sat}) contrast(${con})`;
+                ctx.filter = activeFilterString;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             }
             
-            // استخدام requestVideoFrameCallback للحصول على الفريم بالضبط عند صدوره (يقضي على التقطيع)
             if ('requestVideoFrameCallback' in video) {
                 video.requestVideoFrameCallback(drawFrame);
             } else {
@@ -187,16 +245,15 @@
             }
         }
 
-        // نظام التصدير المطور
+        // التصدير بأعلى جودة وفريمات
         async function startExport() {
             isExporting = true;
             video.loop = false;
             video.pause();
             video.currentTime = 0;
 
-            // استخدام SweetAlert2 لشاشة التحميل الاحترافية
             Swal.fire({
-                title: 'جاري التصدير...',
+                title: 'تصدير بـ 60 فريم...',
                 html: 'الرجاء عدم إغلاق الصفحة<br><br><b id="progress-text" style="color:#a855f7; font-size: 24px;">0%</b>',
                 allowOutsideClick: false,
                 showConfirmButton: false,
@@ -207,19 +264,18 @@
                 }
             });
 
-            await new Promise(r => setTimeout(r, 500)); // راحة للمتصفح
+            await new Promise(r => setTimeout(r, 500));
 
-            // اختيار صيغة MP4 المفضلة لمعالجات الآيباد (تمنع التقطيع تماماً)
-            let options = { mimeType: 'video/webm' }; // افتراضي
-            const appleCodec = 'video/mp4; codecs="avc1.4d002a"'; // H.264 MP4
+            let options = { mimeType: 'video/webm' }; 
+            const appleCodec = 'video/mp4; codecs="avc1.4d002a"'; 
             
             if (MediaRecorder.isTypeSupported(appleCodec)) {
-                options = { mimeType: appleCodec, videoBitsPerSecond: 15000000 }; // 15Mbps ممتاز جداً ولا يسبب كراش
+                options = { mimeType: appleCodec, videoBitsPerSecond: 20000000 }; // رفعنا الـ Bitrate إلى 20M لضمان عدم ضياع أي بكسل
             } else if (MediaRecorder.isTypeSupported('video/webm; codecs=h264')) {
-                options = { mimeType: 'video/webm; codecs=h264', videoBitsPerSecond: 15000000 };
+                options = { mimeType: 'video/webm; codecs=h264', videoBitsPerSecond: 20000000 };
             }
 
-            const stream = canvas.captureStream(60); // 60 إطار في الثانية
+            const stream = canvas.captureStream(60); 
             const recorder = new MediaRecorder(stream, options);
             const chunks = [];
 
@@ -234,11 +290,10 @@
                 
                 isExporting = false;
                 
-                // إغلاق نافذة التحميل وعرض زر التحميل
                 Swal.fire({
                     icon: 'success',
-                    title: 'تم التصدير بنجاح!',
-                    text: 'الفيديو جاهز بأعلى جودة ممكنة للآيباد',
+                    title: 'تم التصدير بسلاسة مجنونة!',
+                    text: 'الفيديو جاهز بأعلى فريمات للآيباد',
                     background: '#0a0a0a',
                     color: '#fff',
                     confirmButtonText: 'تحميل الفيديو',
@@ -248,9 +303,9 @@
                     if (result.isConfirmed) {
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = `AZZAM_V3_ENGINE.${ext}`;
+                        a.download = `AZZAM_60FPS_PRO.${ext}`;
                         a.click();
-                        location.reload(); // إعادة ضبط المحرك بعد التحميل
+                        location.reload(); 
                     }
                 });
             };
@@ -258,16 +313,14 @@
             recorder.start();
             video.play();
 
-            // رسم الفريمات بدقة أثناء التصدير لضمان الجودة
             function renderExportFrame() {
                 if(video.ended) {
                     recorder.stop();
                     return;
                 }
 
-                const sat = document.getElementById('sat').value;
-                const con = document.getElementById('con').value;
-                ctx.filter = `saturate(${sat}) contrast(${con})`;
+                // نستخدم نفس الفلتر النشط أثناء المعاينة
+                ctx.filter = activeFilterString;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 let p = Math.min(Math.floor((video.currentTime / video.duration) * 100), 100);
