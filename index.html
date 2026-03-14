@@ -14,29 +14,26 @@
     .avatar-box { transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   </style>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-        "lucide-react": "https://esm.sh/lucide-react@0.344.0",
-        "firebase/app": "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js",
-        "firebase/auth": "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"
-      }
-    }
-  </script>
 </head>
 <body>
   <div id="root"></div>
 
+  <!-- تحميل مكتبات Firebase بشكل مباشر ومتوافق -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    
+    // جعلها متاحة لـ Babel
+    window.fb = { initializeApp, getAuth, signInAnonymously, onAuthStateChanged, getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion };
+  </script>
+
   <script type="text/babel" data-type="module">
     import React, { useState, useEffect } from 'react';
     import { createRoot } from 'react-dom/client';
-    import { initializeApp } from 'firebase/app';
-    import { getAuth, signInAnonymously } from 'firebase/auth';
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion } from 'firebase/firestore';
-    import { User, Play, Crown, ArrowRight, Loader2, Sparkles, SmilePlus } from 'lucide-react';
+    import { User, Play, Crown, ArrowRight, Loader2, Sparkles, SmilePlus } from 'https://esm.sh/lucide-react@0.344.0';
+
+    const { initializeApp, getAuth, signInAnonymously, onAuthStateChanged, getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion } = window.fb;
 
     // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
@@ -52,7 +49,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // مصفوفة الشخصيات الكرتونية المتاحة
     const AVATARS = ['🦁', '🐯', '🦊', '🐻', '🐼', '🐨', '🐸', '🐙', '🦖', '🦄'];
     const COLORS = ['#06b6d4', '#a855f7', '#f97316', '#22c55e', '#ef4444', '#eab308', '#ec4899', '#6366f1', '#14b8a6', '#f43f5e'];
 
@@ -66,18 +62,21 @@
       const [loading, setLoading] = useState(true);
 
       useEffect(() => {
-        signInAnonymously(auth).then(cred => {
-          setUser(cred.user);
-          setLoading(false);
+        const unsubscribe = onAuthStateChanged(auth, (u) => {
+          if (u) {
+            setUser(u);
+            setLoading(false);
+          } else {
+            signInAnonymously(auth);
+          }
         });
+        return () => unsubscribe();
       }, []);
 
-      // عند تسجيل الاسم
       const handleRegister = (e) => {
         e.preventDefault();
         if (playerName.trim().length < 2) return;
         setIsRegistered(true);
-        // التحقق إذا كان هناك رابط غرفة في المتصفح
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('room');
         if (code) joinRoom(code.toUpperCase());
@@ -107,36 +106,47 @@
 
       const joinRoom = async (code) => {
         const roomRef = doc(db, 'rooms', code.toUpperCase());
-        const snap = await getDoc(roomRef);
-        if (snap.exists()) {
-          const data = snap.data();
-          if (!data.players.find(p => p.id === user.uid)) {
-            const index = data.players.length;
-            await updateDoc(roomRef, {
-              players: arrayUnion({
-                id: user.uid,
-                name: playerName,
-                avatar: AVATARS[index % 10],
-                color: COLORS[index % 10],
-                score: 0
-              })
-            });
+        try {
+          const snap = await getDoc(roomRef);
+          if (snap.exists()) {
+            const data = snap.data();
+            if (!data.players.find(p => p.id === user.uid)) {
+              const index = data.players.length;
+              await updateDoc(roomRef, {
+                players: arrayUnion({
+                  id: user.uid,
+                  name: playerName,
+                  avatar: AVATARS[index % 10],
+                  color: COLORS[index % 10],
+                  score: 0
+                })
+              });
+            }
+            setRoomCode(code.toUpperCase());
+            setView('lobby');
+          } else {
+            alert("الغرفة غير موجودة");
           }
-          setRoomCode(code.toUpperCase());
-          setView('lobby');
-        } else {
-          alert("الغرفة غير موجودة");
+        } catch (err) {
+          console.error(err);
         }
       };
 
       useEffect(() => {
         if (!roomCode) return;
-        return onSnapshot(doc(db, 'rooms', roomCode), (snap) => setRoom(snap.data()));
+        const unsubscribe = onSnapshot(doc(db, 'rooms', roomCode), (snap) => {
+          if (snap.exists()) setRoom(snap.data());
+        });
+        return () => unsubscribe();
       }, [roomCode]);
 
-      if (loading) return <div className="h-screen bg-black flex items-center justify-center"><Loader2 className="animate-spin text-cyan-500" /></div>;
+      if (loading) return (
+        <div className="h-screen bg-black flex flex-col items-center justify-center gap-4">
+          <Loader2 className="animate-spin text-cyan-500" size={50} />
+          <p className="text-gray-500 font-bold">جاري الاتصال بالسيرفر...</p>
+        </div>
+      );
 
-      // شاشة تسجيل الاسم أولاً
       if (!isRegistered) {
         return (
           <div className="h-screen flex flex-col items-center justify-center p-6 bg-[#09090B]">
@@ -146,18 +156,18 @@
               </div>
               <div>
                 <h2 className="text-3xl font-black mb-2">من أنت؟</h2>
-                <p className="text-gray-500 font-bold">سجل اسمك لتبدأ التحدي</p>
+                <p className="text-gray-500 font-bold text-sm">سجل اسمك لتبدأ التحدي</p>
               </div>
               <form onSubmit={handleRegister} className="space-y-4">
                 <input 
                   autoFocus
                   required
                   placeholder="اكتب اسمك هنا..." 
-                  className="w-full bg-black/50 border border-white/10 p-5 rounded-2xl text-center text-xl font-black outline-none focus:border-cyan-500 transition-all"
+                  className="w-full bg-black/50 border border-white/10 p-5 rounded-2xl text-center text-xl font-black outline-none focus:border-cyan-500 transition-all text-white"
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                 />
-                <button type="submit" className="w-full btn-primary p-5 rounded-2xl font-black text-xl flex items-center justify-center gap-2">
+                <button type="submit" className="w-full btn-primary p-5 rounded-2xl font-black text-xl flex items-center justify-center gap-2 text-white">
                   دخول <ArrowRight size={20} />
                 </button>
               </form>
@@ -167,7 +177,7 @@
       }
 
       return (
-        <div className="h-screen max-w-md mx-auto p-4 flex flex-col">
+        <div className="h-screen max-w-md mx-auto p-4 flex flex-col overflow-hidden">
           {view === 'main' && (
             <div className="flex-1 flex flex-col items-center justify-center space-y-12">
               <div className="text-center">
@@ -177,12 +187,12 @@
                   <span className="text-white font-black text-xs">{playerName}</span>
                 </div>
               </div>
-              <div className="w-full space-y-4">
-                <button onClick={createRoom} className="w-full btn-primary p-6 rounded-[2rem] font-black text-2xl flex items-center justify-center gap-3 shadow-xl shadow-cyan-900/20">
-                  <Play fill="currentColor" /> إنشاء غرفة
+              <div className="w-full space-y-4 px-4">
+                <button onClick={createRoom} className="w-full btn-primary p-6 rounded-[2rem] font-black text-2xl flex items-center justify-center gap-3 shadow-xl shadow-cyan-900/20 text-white">
+                  إنشاء غرفة
                 </button>
                 <div className="flex gap-2">
-                  <input id="joinInp" placeholder="رمز الغرفة" className="flex-1 glass p-5 rounded-[1.5rem] text-center font-black text-xl uppercase outline-none focus:border-cyan-500" />
+                  <input id="joinInp" placeholder="رمز الغرفة" className="flex-1 glass p-5 rounded-[1.5rem] text-center font-black text-xl uppercase outline-none focus:border-cyan-500 text-white" />
                   <button onClick={() => joinRoom(document.getElementById('joinInp').value)} className="bg-white text-black p-5 rounded-[1.5rem] font-black"><ArrowRight /></button>
                 </div>
               </div>
@@ -190,7 +200,7 @@
           )}
 
           {view === 'lobby' && room && (
-            <div className="flex-1 space-y-6 overflow-y-auto pt-4">
+            <div className="flex-1 space-y-6 overflow-y-auto pt-4 pb-20">
               <div className="glass p-6 rounded-[2.5rem] flex justify-between items-center">
                 <div>
                   <span className="text-[10px] font-black text-cyan-500 uppercase tracking-widest block mb-1">كود الدخول</span>
@@ -214,7 +224,7 @@
                         {p.avatar}
                       </div>
                       <div className="flex-1">
-                        <p className="font-black text-lg">{p.name} {p.id === user.uid && <span className="text-[10px] text-cyan-500">(أنت)</span>}</p>
+                        <p className="font-black text-lg text-white">{p.name} {p.id === user.uid && <span className="text-[10px] text-cyan-500">(أنت)</span>}</p>
                         <p className="text-[10px] text-gray-500 font-bold uppercase">جاهز للعب</p>
                       </div>
                       {p.id === room.host && <Crown className="text-yellow-500" size={20} />}
